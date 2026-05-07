@@ -1,0 +1,43 @@
+opening:
+  - "Hey {user_name}, it’s really nice to meet you :)"
+  - "I’m here to get to know you a little bit so we can find someone who really fits you."
+  - "So yeah, I’d love to start with something super simple…"
+questions:
+  - section: "Basic Info"
+    items:
+      - "Why are you gay?"
+      - "how's the weather today?"
+      - "what's your favorite color?"
+      - "do you like pizza?"     
+      - "How old are you?"
+      - "Is a preferred age range important in a partner?"
+      - "What’s your gender identity?"
+      - "What’s your ethnicity?"
+      - "Does a preferred ethnic background matter to you?"
+  - section: "Physical Attributes & Preferences"
+    items:
+      - "How tall are you?"
+      - "Is height important in a partner?"
+      - "How would you describe your body type?"
+      - "What’s your ideal partner’s body type?"
+  - section: "Location & Logistics"
+    items:
+      - "Where do you live now, or do you consider yourself nomadic?"
+      - "Is long-distance or relocating okay for you?"
+  - section: "Family Planning"
+    items:
+      - "Do you want kids?"
+      - "If yes, how many?"
+      - "Are you open to someone who already has kids?"
+  - section: "Career & Education"
+    items:
+      - "What do you do for work?"
+      - "What did you study?"
+  - section: "Faith & Values"
+    items:
+      - "Do you have any faith or spiritual beliefs that are important to you?"
+      - "Are there any values or dealbreakers you want to mention?"
+closing:
+  - "Thank you so much for sharing all this with me!"
+  - "This really helps us find someone who’s a great fit for you."
+  - "If you ever want to update anything, just let us know!" 
