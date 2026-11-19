@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Dependencies include: FastAPI, SQLAlchemy, Twilio, OpenAI, Redis, ChromaDB, LangChain
 
 ### Testing
-- `python test_twilio_media.py` - Test Twilio media functionality
+- `python -m tests.manual.test_twilio_media` - Test Twilio media functionality (run from the repo root)
 
 ## Architecture Overview
 
@@ -28,21 +28,22 @@ This is a WhatsApp AI dating coach bot that provides personalized dating advice 
 - **ChromaDB** for vector storage and RAG (Retrieval Augmented Generation)
 - **APScheduler** for scheduling voice calls
 
-### Database Models (`models.py`)
+### Database Models (`oracle/data/models.py`)
 - `Message` - Stores WhatsApp message history
-- `UserProfile` - User onboarding data and preferences (defined in `db.py`)
+- `UserProfile` - User onboarding data and preferences (defined in `oracle/data/db.py`)
 - `TempConversation` - Temporary message storage during processing
 - `PermanentConversation` - Saved conversations with specific prospects
 
 ### Key Modules
-- `main.py` - FastAPI app with webhook endpoint and command handlers
-- `messaging.py` - WhatsApp message processing and sending logic
-- `onboarding.py` - User registration flow with multi-step questions
-- `llm_utils.py` - OpenAI integration and prompt management
-- `db_utils.py` - Database operations and utilities
-- `scheduler.py` - Voice call scheduling functionality
-- `voice.py` - Voice call handling and processing
-- `validators.py` - Input validation and data normalization
+- `main.py`, `voice.py` - Root entry-point shims; they import `app` from the modules below
+- `oracle/messaging/app.py` - FastAPI app with webhook endpoint and command handlers
+- `oracle/messaging/messaging.py` - WhatsApp message processing and sending logic
+- `oracle/messaging/onboarding.py` - User registration flow with multi-step questions
+- `oracle/llm/llm_utils.py` - OpenAI integration and prompt management
+- `oracle/data/db_utils.py` - Database operations and utilities
+- `oracle/voice/scheduler.py` - Voice call scheduling functionality
+- `oracle/voice/app.py` - Voice call handling and processing
+- `oracle/messaging/validators.py` - Input validation and data normalization
 
 ### Message Flow
 1. WhatsApp messages received via Twilio webhook at `/webhook`
@@ -78,7 +79,7 @@ Users can send slash commands:
 ### Voice Integration
 - External voice API at `voice.0racle.ai` for phone calls
 - Scheduled voice calls using APScheduler
-- Voice questions configuration in `voice_questions.yaml`
+- Voice questions configuration in `oracle/llm/voice_questions.yaml`
 
 ## Development Notes
 

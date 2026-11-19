@@ -2,7 +2,7 @@ import openai
 import re
 import json
 from typing import List, Optional, Tuple
-from prompts.legacy_prompts import (
+from oracle.llm.prompts.legacy_prompts import (
     situation_analysis, INTENTION_DETECTION_WHEN_NO_IMAGE,
     reply_drafting_or_advice, self_reflection_or_general,
     OCR_prompt, INTENTION_DETECTION_FROM_IMAGE_CAPTION,
@@ -10,7 +10,7 @@ from prompts.legacy_prompts import (
 )
 from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings
-from db_utils import get_previous_convo
+from oracle.data.db_utils import get_previous_convo
 from sqlalchemy.ext.asyncio import AsyncSession
 
 

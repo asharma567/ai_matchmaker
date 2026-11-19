@@ -68,7 +68,7 @@ def test_refactored_bot():
     print("=" * 50)
     
     # Import and start the server in test mode
-    from main import app
+    from oracle.messaging.app import app
     from fastapi.testclient import TestClient
     
     client = TestClient(app)

@@ -6,7 +6,7 @@ from unittest.mock import patch, MagicMock
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
 
-from main import app
+from oracle.messaging.app import app
 
 
 class TestWebhookIntegration:
@@ -28,9 +28,9 @@ class TestWebhookIntegration:
         assert response.status_code == 200
         assert isinstance(response.json(), list)
 
-    @patch('main.validator.validate')
-    @patch('main.get_onboarding_state')
-    @patch('main.handle_new_user')
+    @patch('oracle.messaging.app.validator.validate')
+    @patch('oracle.messaging.app.get_onboarding_state')
+    @patch('oracle.messaging.app.handle_new_user')
     def test_webhook_new_user_flow(self, mock_handle_new_user, mock_get_state, mock_validate, client):
         """Test webhook flow for new user"""
         # Setup mocks
@@ -48,7 +48,7 @@ class TestWebhookIntegration:
             "SmsMessageSid": "test_sid_123"
         }
         
-        with patch('main.session') as mock_session:
+        with patch('oracle.messaging.app.session') as mock_session:
             mock_session.execute.return_value.scalar_one_or_none.return_value = None
             
             response = client.post(
@@ -60,8 +60,8 @@ class TestWebhookIntegration:
             assert response.status_code == 200
             mock_handle_new_user.assert_called_once()
 
-    @patch('main.validator.validate')
-    @patch('main.get_onboarding_state')
+    @patch('oracle.messaging.app.validator.validate')
+    @patch('oracle.messaging.app.get_onboarding_state')
     def test_webhook_help_command(self, mock_get_state, mock_validate, client):
         """Test webhook help command"""
         mock_validate.return_value = True
@@ -74,7 +74,7 @@ class TestWebhookIntegration:
             "SmsMessageSid": "test_sid_123"
         }
         
-        with patch('main.session') as mock_session:
+        with patch('oracle.messaging.app.session') as mock_session:
             mock_session.execute.return_value.scalar_one_or_none.return_value = MagicMock(status="complete")
             
             response = client.post(
@@ -86,8 +86,8 @@ class TestWebhookIntegration:
             assert response.status_code == 200
             assert "Available Commands" in response.text
 
-    @patch('main.validator.validate')
-    @patch('main.get_onboarding_state')
+    @patch('oracle.messaging.app.validator.validate')
+    @patch('oracle.messaging.app.get_onboarding_state')
     def test_webhook_invalid_signature(self, mock_get_state, mock_validate, client):
         """Test webhook with invalid signature"""
         mock_validate.return_value = False
@@ -108,8 +108,8 @@ class TestWebhookIntegration:
         assert response.status_code == 400
         assert "Invalid signature" in response.json()["detail"]
 
-    @patch('main.validator.validate')
-    @patch('main.get_onboarding_state')
+    @patch('oracle.messaging.app.validator.validate')
+    @patch('oracle.messaging.app.get_onboarding_state')
     @patch('httpx.AsyncClient')
     def test_webhook_call_command_success(self, mock_client, mock_get_state, mock_validate, client):
         """Test webhook call command success"""
@@ -128,7 +128,7 @@ class TestWebhookIntegration:
             "SmsMessageSid": "test_sid_123"
         }
         
-        with patch('main.session') as mock_session:
+        with patch('oracle.messaging.app.session') as mock_session:
             mock_profile = MagicMock(status="complete")
             mock_session.execute.return_value.scalar_one_or_none.return_value = mock_profile
             
@@ -141,8 +141,8 @@ class TestWebhookIntegration:
             assert response.status_code == 200
             assert "calling you right now" in response.text
 
-    @patch('main.validator.validate')
-    @patch('main.get_onboarding_state')
+    @patch('oracle.messaging.app.validator.validate')
+    @patch('oracle.messaging.app.get_onboarding_state')
     def test_webhook_media_message(self, mock_get_state, mock_validate, client):
         """Test webhook with media message"""
         mock_validate.return_value = True
@@ -156,8 +156,8 @@ class TestWebhookIntegration:
             "SmsMessageSid": "test_sid_123"
         }
         
-        with patch('main.session') as mock_session, \
-             patch('main.redis_client') as mock_redis:
+        with patch('oracle.messaging.app.session') as mock_session, \
+             patch('oracle.messaging.app.redis_client') as mock_redis:
             
             mock_profile = MagicMock(status="complete")
             mock_session.execute.return_value.scalar_one_or_none.return_value = mock_profile
@@ -180,9 +180,9 @@ class TestEndToEndFlow:
     def client(self):
         return TestClient(app)
 
-    @patch('main.validator.validate')
-    @patch('main.get_onboarding_state')
-    @patch('main.handle_onboarding')
+    @patch('oracle.messaging.app.validator.validate')
+    @patch('oracle.messaging.app.get_onboarding_state')
+    @patch('oracle.messaging.app.handle_onboarding')
     def test_complete_onboarding_flow(self, mock_handle_onboarding, mock_get_state, mock_validate, client):
         """Test complete user onboarding flow"""
         mock_validate.return_value = True
@@ -208,8 +208,8 @@ class TestEndToEndFlow:
         assert response.status_code == 200
         mock_handle_onboarding.assert_called_once()
 
-    @patch('main.validator.validate')
-    @patch('main.get_onboarding_state')
+    @patch('oracle.messaging.app.validator.validate')
+    @patch('oracle.messaging.app.get_onboarding_state')
     def test_user_journey_help_to_call(self, mock_get_state, mock_validate, client):
         """Test user journey from help to call command"""
         mock_validate.return_value = True
@@ -223,7 +223,7 @@ class TestEndToEndFlow:
             "SmsMessageSid": "test_sid_123"
         }
         
-        with patch('main.session') as mock_session:
+        with patch('oracle.messaging.app.session') as mock_session:
             mock_profile = MagicMock(status="complete")
             mock_session.execute.return_value.scalar_one_or_none.return_value = mock_profile
             
@@ -249,7 +249,7 @@ class TestEndToEndFlow:
                 "SmsMessageSid": "test_sid_124"
             }
             
-            with patch('main.session') as mock_session:
+            with patch('oracle.messaging.app.session') as mock_session:
                 mock_session.execute.return_value.scalar_one_or_none.return_value = mock_profile
                 
                 call_response = client.post(
@@ -269,7 +269,7 @@ class TestErrorHandling:
     def client(self):
         return TestClient(app)
 
-    @patch('main.validator.validate')
+    @patch('oracle.messaging.app.validator.validate')
     def test_webhook_missing_required_fields(self, mock_validate, client):
         """Test webhook with missing required fields"""
         mock_validate.return_value = True
@@ -290,8 +290,8 @@ class TestErrorHandling:
         # Should handle gracefully or return appropriate error
         assert response.status_code in [400, 500]
 
-    @patch('main.validator.validate')
-    @patch('main.get_onboarding_state')
+    @patch('oracle.messaging.app.validator.validate')
+    @patch('oracle.messaging.app.get_onboarding_state')
     def test_webhook_database_error(self, mock_get_state, mock_validate, client):
         """Test webhook behavior during database errors"""
         mock_validate.return_value = True
@@ -304,7 +304,7 @@ class TestErrorHandling:
             "SmsMessageSid": "test_sid_123"
         }
         
-        with patch('main.session') as mock_session:
+        with patch('oracle.messaging.app.session') as mock_session:
             mock_session.execute.side_effect = Exception("Database connection failed")
             
             response = client.post(

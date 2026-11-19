@@ -2,8 +2,8 @@
 
 import pytest
 from unittest.mock import AsyncMock, patch, MagicMock
-from services import MessageService, UserService, VoiceService, NotificationService
-from db import UserProfile, Message
+from oracle.messaging.services import MessageService, UserService, VoiceService, NotificationService
+from oracle.data.db import UserProfile, Message
 
 
 class TestMessageService:
@@ -12,7 +12,7 @@ class TestMessageService:
     @pytest.mark.asyncio
     async def test_process_text_message_success(self, message_service):
         """Test successful text message processing"""
-        with patch('services.process_with_small_llm') as mock_llm:
+        with patch('oracle.messaging.services.process_with_small_llm') as mock_llm:
             mock_llm.return_value = ("AI response", "extracted_name", "reply_drafting_or_advice")
             
             ai_response, intention, prospect_name = await message_service.process_text_message(
@@ -29,7 +29,7 @@ class TestMessageService:
     @pytest.mark.asyncio
     async def test_process_text_message_error_handling(self, message_service):
         """Test error handling in text message processing"""
-        with patch('services.process_with_small_llm', side_effect=Exception("API Error")):
+        with patch('oracle.messaging.services.process_with_small_llm', side_effect=Exception("API Error")):
             ai_response, intention, prospect_name = await message_service.process_text_message(
                 "whatsapp:+1234567890",
                 "Test message",
@@ -43,10 +43,10 @@ class TestMessageService:
     @pytest.mark.asyncio
     async def test_process_media_message_success(self, message_service):
         """Test successful media message processing"""
-        with patch('services.fetch_media_as_base64') as mock_fetch, \
-             patch('services.run_ocr_gpt4o') as mock_ocr, \
-             patch('services.process_with_small_llm') as mock_llm, \
-             patch('services.run_final_gpt4o_analysis') as mock_final:
+        with patch('oracle.messaging.services.fetch_media_as_base64') as mock_fetch, \
+             patch('oracle.messaging.services.run_ocr_gpt4o') as mock_ocr, \
+             patch('oracle.messaging.services.process_with_small_llm') as mock_llm, \
+             patch('oracle.messaging.services.run_final_gpt4o_analysis') as mock_final:
             
             mock_fetch.return_value = ["data:image/jpeg;base64,test_data"]
             mock_ocr.return_value = ("OCR text result", ["extracted_name"])
@@ -67,7 +67,7 @@ class TestMessageService:
     @pytest.mark.asyncio
     async def test_process_media_message_no_media(self, message_service):
         """Test media message processing when no media is available"""
-        with patch('services.fetch_media_as_base64', return_value=[]):
+        with patch('oracle.messaging.services.fetch_media_as_base64', return_value=[]):
             ai_response, intention, prospect_name, ocr_text = await message_service.process_media_message(
                 "whatsapp:+1234567890",
                 "Analyze this image",
@@ -182,7 +182,7 @@ class TestNotificationService:
     @pytest.mark.asyncio
     async def test_send_whatsapp_message_success(self, notification_service, test_session):
         """Test successful WhatsApp message sending"""
-        with patch('services.send_simple_whatsapp_message') as mock_send:
+        with patch('oracle.messaging.services.send_simple_whatsapp_message') as mock_send:
             mock_send.return_value = None  # Successful send
             
             success = await notification_service.send_whatsapp_message(
@@ -197,7 +197,7 @@ class TestNotificationService:
     @pytest.mark.asyncio
     async def test_send_whatsapp_message_failure(self, notification_service, test_session):
         """Test failed WhatsApp message sending"""
-        with patch('services.send_simple_whatsapp_message', side_effect=Exception("Send failed")):
+        with patch('oracle.messaging.services.send_simple_whatsapp_message', side_effect=Exception("Send failed")):
             success = await notification_service.send_whatsapp_message(
                 "whatsapp:+1234567890",
                 "Test message",

@@ -2,8 +2,8 @@
 Prompts module - YAML-based prompts for voice and messaging
 
 Usage:
-    from prompts import get_voice_prompt, get_help_message, get_welcome_message
-    from prompts.legacy_prompts import situation_analysis, reply_drafting_or_advice
+    from oracle.llm.prompts import get_voice_prompt, get_help_message, get_welcome_message
+    from oracle.llm.prompts.legacy_prompts import situation_analysis, reply_drafting_or_advice
 """
 
 from .yaml_voice_builder import get_yaml_voice_builder

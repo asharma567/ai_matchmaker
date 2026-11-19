@@ -15,13 +15,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from httpx import AsyncClient as HTTPXClient
 
-from db import UserProfile, Message
-from utils import get_session
-from onboarding import get_onboarding_state, handle_onboarding, handle_new_user
-from messaging import process_media_after_delay, process_and_send_reply, send_simple_whatsapp_message
-from validators import pick_prospect_from_body
-from prompts import get_help_message
-from onboarding import redis_client
+from oracle.data.db import UserProfile, Message
+from oracle.utils import get_session
+from oracle.messaging.onboarding import get_onboarding_state, handle_onboarding, handle_new_user
+from oracle.messaging.messaging import process_media_after_delay, process_and_send_reply, send_simple_whatsapp_message
+from oracle.messaging.validators import pick_prospect_from_body
+from oracle.llm.prompts import get_help_message
+from oracle.messaging.onboarding import redis_client
 
 
 class WebhookHandler:

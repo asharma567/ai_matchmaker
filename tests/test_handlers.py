@@ -3,8 +3,8 @@
 import pytest
 from unittest.mock import AsyncMock, patch, MagicMock
 from fastapi import BackgroundTasks
-from handlers import WebhookHandler, CommandRouter
-from db import UserProfile
+from oracle.messaging.handlers import WebhookHandler, CommandRouter
+from oracle.data.db import UserProfile
 
 
 class TestWebhookHandler:
@@ -54,7 +54,7 @@ class TestWebhookHandler:
         """Test summary command with existing profile"""
         background_tasks = BackgroundTasks()
         
-        with patch('handlers.send_simple_whatsapp_message') as mock_send:
+        with patch('oracle.messaging.handlers.send_simple_whatsapp_message') as mock_send:
             response = await webhook_handler.handle_summary_command(
                 "whatsapp:+1234567890",
                 sample_user_profile,
@@ -145,8 +145,8 @@ class TestWebhookHandler:
         """Test media message handling"""
         background_tasks = BackgroundTasks()
         
-        with patch('handlers.redis_client') as mock_redis, \
-             patch('handlers.process_media_after_delay') as mock_process:
+        with patch('oracle.messaging.handlers.redis_client') as mock_redis, \
+             patch('oracle.messaging.handlers.process_media_after_delay') as mock_process:
             
             mock_redis.rpush.return_value = None
             mock_redis.expire.return_value = None
@@ -177,7 +177,7 @@ class TestWebhookHandler:
         """Test text message handling"""
         background_tasks = BackgroundTasks()
         
-        with patch('handlers.process_and_send_reply') as mock_process:
+        with patch('oracle.messaging.handlers.process_and_send_reply') as mock_process:
             await webhook_handler.handle_text_message(
                 "whatsapp:+1234567890",
                 "Hello",

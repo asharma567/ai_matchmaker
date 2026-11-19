@@ -17,7 +17,7 @@ async def setup_database():
     print("🔧 Setting up staging database...")
     
     try:
-        from db import engine, Base
+        from oracle.data.db import engine, Base
         from sqlalchemy.ext.asyncio import AsyncSession
         
         # Create all tables

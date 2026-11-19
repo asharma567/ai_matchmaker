@@ -27,14 +27,14 @@ from starlette.middleware.base import BaseHTTPMiddleware
 import websocket as ws_client  # `websocket-client` package
 from twilio.rest import Client
 from sqlalchemy.ext.asyncio import AsyncSession
-from db import async_session, UserProfile
+from oracle.data.db import async_session, UserProfile
 from sqlalchemy import update, select
-from prompts import get_voice_prompt
-from constant import VOICE, MODEL, TRANSCRIPTION_MODEL
-from db_utils import save_transcript
+from oracle.llm.prompts import get_voice_prompt
+from oracle.constant import VOICE, MODEL, TRANSCRIPTION_MODEL
+from oracle.data.db_utils import save_transcript
 from twilio.request_validator import RequestValidator
-from messaging import send_signal_user_answered
-from onboarding import after_transcript_saved
+from oracle.messaging.messaging import send_signal_user_answered
+from oracle.messaging.onboarding import after_transcript_saved
 
 # import redis.asyncio as aioredis
 
@@ -522,11 +522,3 @@ async def media_stream(websocket: WebSocket):
                 print(f"❌ Failed to save transcript: {e}")
         else:
             print("⚠️ No phone number available; cannot save transcript.")
-
-
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("voice:app", host="0.0.0.0", port=8002, reload=True, proxy_headers=True, ws_ping_interval=None, ws_ping_timeout=None)
-
-

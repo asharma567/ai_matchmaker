@@ -7,17 +7,17 @@ from httpx import AsyncClient as HTTPXClient, BasicAuth
 from fastapi.responses import PlainTextResponse, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from db import Message, async_session
-from db_utils import save_message_to_db
-from llm_utils import (
+from oracle.data.db import Message, async_session
+from oracle.data.db_utils import save_message_to_db
+from oracle.llm.llm_utils import (
     get_gpt_vision_response, get_intention_from_user_caption,
     get_intention_from_user_text, get_gpt_response,
     chunk_by_word_boundary, split_replies, split_suggested_messages,
     remove_suggested_messages_block, separate_ocr_name, separate_name_intention
 )
-from onboarding import redis_client
-from utils import fetch_media_as_base64
-from validators import normalize_prospect_name, make_prospect_name, extract_country_code
+from oracle.messaging.onboarding import redis_client
+from oracle.utils import fetch_media_as_base64
+from oracle.messaging.validators import normalize_prospect_name, make_prospect_name, extract_country_code
 
 load_dotenv()  
 

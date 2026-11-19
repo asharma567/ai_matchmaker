@@ -28,7 +28,7 @@ def test_prospect_name_logic():
             2. AI extracted from text: "What should I tell Mike?" -> use "mike" 
             3. Generated from context: General question -> create generic ID
             """
-            from validators import normalize_prospect_name, make_prospect_name
+            from oracle.messaging.validators import normalize_prospect_name, make_prospect_name
             
             # Use provided prospect name if available (highest priority)
             if provided_prospect:
@@ -65,7 +65,7 @@ def test_prospect_name_logic():
         normalize_prospect_name = staticmethod(mock_normalize_prospect_name)
         make_prospect_name = staticmethod(mock_make_prospect_name)
     
-    sys.modules['validators'] = MockValidators()
+    sys.modules['oracle.messaging.validators'] = MockValidators()
     
     # Test the logic
     service = MockMessageService()

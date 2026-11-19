@@ -10,8 +10,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from openai import AsyncOpenAI
 from httpx import AsyncClient, BasicAuth
-from models import TempConversation, PermanentConversation
-from prompts.legacy_prompts import OCR_prompt, situation_analysis, reply_drafting_or_advice, self_reflection_or_general
+from oracle.data.models import TempConversation, PermanentConversation
+from oracle.llm.prompts.legacy_prompts import OCR_prompt, situation_analysis, reply_drafting_or_advice, self_reflection_or_general
 from dotenv import load_dotenv
 
 load_dotenv()  # ✅ MUST come before using os.getenv
@@ -110,7 +110,7 @@ async def fetch_media_as_base64(media_urls: List[str]) -> List[str]:
 
 
 async def get_session() -> AsyncSession:
-    from db import async_session
+    from oracle.data.db import async_session
     async with async_session() as session:
         yield session
 

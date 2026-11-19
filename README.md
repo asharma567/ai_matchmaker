@@ -30,13 +30,14 @@ This is a roadmap, not a shipped-feature checklist. Background checks, live soci
 
 | Files | Role |
 | --- | --- |
-| `main.py` | Messaging webhook, health endpoint and voice/scheduler entry points |
-| `handlers.py`, `services.py` | Command routing and application services |
-| `onboarding.py` | Onboarding flow/state |
-| `voice.py` | Voice application and audio WebSocket |
-| `messaging.py`, `llm_utils.py`, `prompts/` | Messaging and LLM/prompt support |
-| `db.py`, `models.py`, `db_utils.py` | Database models/access |
-| `config.py`, `scheduler.py` | Configuration and scheduling |
+| `main.py`, `voice.py` | Root entry-point shims for the two servers below |
+| `oracle/messaging/app.py` | Messaging webhook, health endpoint and voice/scheduler entry points |
+| `oracle/messaging/handlers.py`, `oracle/messaging/services.py` | Command routing and application services |
+| `oracle/messaging/onboarding.py` | Onboarding flow/state |
+| `oracle/voice/app.py` | Voice application and audio WebSocket |
+| `oracle/messaging/messaging.py`, `oracle/llm/llm_utils.py`, `oracle/llm/prompts/` | Messaging and LLM/prompt support |
+| `oracle/data/db.py`, `oracle/data/models.py`, `oracle/data/db_utils.py` | Database models/access |
+| `oracle/config.py`, `oracle/voice/scheduler.py` | Configuration and scheduling |
 | `start_staging.py`, `tests/`, `conftest.py` | Historical launcher and test code |
 
 The latest commit message mentions Telegram, but the inspected application entry points are WhatsApp/Twilio. A Telegram runtime is not documented here as implemented.
@@ -53,7 +54,7 @@ Configuration names read by the inspected code:
 | --- | --- |
 | Environment | `ENVIRONMENT` (set explicitly to `staging`) |
 | Twilio | `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `WHATSAPP_NUMBER` |
-| Database | `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_HOST`, `POSTGRES_PORT`; `main.py` also reads `DATABASE_URL` |
+| Database | `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_HOST`, `POSTGRES_PORT`; `oracle/messaging/app.py` also reads `DATABASE_URL` |
 | Model/voice | `OPENAI_API_KEY`, `DEEPGRAM_API_KEY`, `ELEVENLABS_API_KEY` |
 | Routing | `VOICE_API_BASE_URL` |
 | Validation | `SKIP_TWILIO_VALIDATION`; keep validation enabled on externally accessible endpoints |
@@ -63,7 +64,7 @@ Supply credentials privately. Onboarding currently points Redis at `redis://loca
 Known setup gaps:
 
 - `requirements.txt` is mostly unpinned and includes an unexplained `radis` entry. The code directly imports `websocket` (`websocket-client`) and `yaml` (`PyYAML`), neither explicitly declared there. A clean installation and dependency resolution have not been verified.
-- `config.py` defaults to `production`, while the staging launcher defaults its displayed environment to `staging`; set the actual environment explicitly.
+- `oracle/config.py` defaults to `production`, while the staging launcher defaults its displayed environment to `staging`; set the actual environment explicitly.
 - The launcher tells you to tunnel port 8000 and use `/voice-greeting`, but the main app exposes `/voice/voice-greeting`. `/voice-greeting` exists on the separate voice service on port 8002. Reconcile public routing, signature forwarding and WebSocket routing before testing calls; neither configuration is verified here.
 - `pytest.ini` has a nonstandard `[tool:pytest]` section and coverage options needing review. Test files do not establish a passing suite.
 - Review hardcoded endpoints, test recipients and credential-handling files before publishing or running this inherited prototype. The repository is not certified for unchanged redistribution.

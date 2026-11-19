@@ -1,5 +1,5 @@
 from sqlalchemy import select, update
-from db import WhatsAppReply, UserProfile, Message
+from oracle.data.db import WhatsAppReply, UserProfile, Message
 from sqlalchemy.ext.asyncio import AsyncSession
 
 

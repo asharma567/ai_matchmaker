@@ -6,10 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 import logging
 
-from db import UserProfile, Message
-from utils import fetch_media_as_base64, run_ocr_gpt4o, process_with_small_llm, run_final_gpt4o_analysis
-from db_utils import save_message_to_db
-from validators import normalize_prospect_name, make_prospect_name
+from oracle.data.db import UserProfile, Message
+from oracle.utils import fetch_media_as_base64, run_ocr_gpt4o, process_with_small_llm, run_final_gpt4o_analysis
+from oracle.data.db_utils import save_message_to_db
+from oracle.messaging.validators import normalize_prospect_name, make_prospect_name
 
 
 class MessageService:
@@ -185,7 +185,7 @@ class NotificationService:
         sms_message_sid: str = None
     ) -> bool:
         """Send a WhatsApp message"""
-        from messaging import send_simple_whatsapp_message
+        from oracle.messaging.messaging import send_simple_whatsapp_message
         
         try:
             # Use existing messaging function

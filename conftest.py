@@ -8,9 +8,9 @@ from sqlalchemy.orm import sessionmaker
 from httpx import AsyncClient
 from fastapi.testclient import TestClient
 
-from main import app
-from db import Base, UserProfile, Message
-from services import MessageService, UserService, VoiceService, NotificationService
+from oracle.messaging.app import app
+from oracle.data.db import Base, UserProfile, Message
+from oracle.messaging.services import MessageService, UserService, VoiceService, NotificationService
 
 
 # Test database URL (use in-memory SQLite for tests)

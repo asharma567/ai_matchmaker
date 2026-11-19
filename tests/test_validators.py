@@ -1,7 +1,7 @@
 # tests/test_validators.py - Tests for validation functions
 
 import pytest
-from validators import (
+from oracle.messaging.validators import (
     is_valid_phone, parse_and_normalize_phone, parse_birthdate,
     is_valid_gender, is_valid_call_preference, extract_country_code,
     normalize_text, normalize_prospect_name, pick_prospect_from_body,

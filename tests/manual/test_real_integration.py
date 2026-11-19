@@ -26,7 +26,7 @@ def test_webhook_with_real_requests():
     # Start the FastAPI server in test mode
     print("1. Testing FastAPI app startup...")
     try:
-        from main import app
+        from oracle.messaging.app import app
         from fastapi.testclient import TestClient
         
         client = TestClient(app)
@@ -143,7 +143,7 @@ def test_command_routing_integration():
     print("\n3. Testing command routing integration...")
     
     try:
-        from main import app
+        from oracle.messaging.app import app
         from fastapi.testclient import TestClient
         import os
         

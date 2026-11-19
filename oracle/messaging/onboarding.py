@@ -1,24 +1,24 @@
 from fastapi.responses import PlainTextResponse
-from utils import parse_datetime_from_user_input
-from db_utils import upsert_user_profile
-from llm_utils import evaluate_onboarding_llm  # ← make sure this is correctly imported
-from constant import US_EASTERN
+from oracle.utils import parse_datetime_from_user_input
+from oracle.data.db_utils import upsert_user_profile
+from oracle.llm.llm_utils import evaluate_onboarding_llm  # ← make sure this is correctly imported
+from oracle.constant import US_EASTERN
 
 
-from prompts import get_welcome_message
-from scheduler import schedule_voice_call
+from oracle.llm.prompts import get_welcome_message
+from oracle.voice.scheduler import schedule_voice_call
 from typing import List
 import json
 import asyncio
 from httpx import AsyncClient as HTTPXClient
 import os
-from db_utils import upsert_user_profile, get_user_profile
-from validators import is_valid_phone, parse_birthdate, is_valid_gender, is_valid_call_preference, normalize_text, parse_and_normalize_phone
-from constant import POSITIVE_RESPONSES, NEGATIVE_RESPONSES
-from db import UserProfile, async_session
+from oracle.data.db_utils import upsert_user_profile, get_user_profile
+from oracle.messaging.validators import is_valid_phone, parse_birthdate, is_valid_gender, is_valid_call_preference, normalize_text, parse_and_normalize_phone
+from oracle.constant import POSITIVE_RESPONSES, NEGATIVE_RESPONSES
+from oracle.data.db import UserProfile, async_session
 from sqlalchemy import select, update
-from constant import US_EASTERN
-from llm_utils import generate_user_synopsis
+from oracle.constant import US_EASTERN
+from oracle.llm.llm_utils import generate_user_synopsis
 
 import time
 import uuid

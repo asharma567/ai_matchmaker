@@ -6,16 +6,16 @@ from twilio.request_validator import RequestValidator
 import logging
 import os
 from datetime import datetime
-from db import Base, Message, engine, UserProfile
-from utils import get_session
+from oracle.data.db import Base, Message, engine, UserProfile
+from oracle.utils import get_session
 from sqlalchemy import select
-from onboarding import redis_client
+from oracle.messaging.onboarding import redis_client
 from datetime import datetime, timedelta
-from scheduler import scheduler, schedule_voice_call
+from oracle.voice.scheduler import scheduler, schedule_voice_call
 from zoneinfo import ZoneInfo
-from onboarding import get_onboarding_state, handle_new_user
-from validators import pick_prospect_from_body
-from handlers import CommandRouter
+from oracle.messaging.onboarding import get_onboarding_state, handle_new_user
+from oracle.messaging.validators import pick_prospect_from_body
+from oracle.messaging.handlers import CommandRouter
 
 logging.basicConfig(level=logging.INFO)
 
@@ -217,26 +217,3 @@ async def proxy_call_status(request: Request):
         return Response(content=response.text, media_type="text/plain")
 
 # WebSocket proxy removed - Twilio connects directly to voice service on port 8002
-
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8050, reload=True, proxy_headers=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
