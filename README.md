@@ -18,11 +18,11 @@ These are code capabilities, not a claim that every flow currently works end to 
 
 The July 2025 matchmaker roadmap proposes:
 
-1. **Onboarding:** social screenshots and typed or voice Q&A produce a profile and readable bio.
-2. **Preference discovery:** relationship history and reference photos inform a matching schema.
-3. **Curated introductions:** three to five suggestions per week, with a reason for each match.
-4. **Date coordination:** scheduling, venue suggestions and reminders; MVP reservations are manual.
-5. **Feedback:** mutual second-date interest, post-date feedback and coaching/profile refinement.
+1. **Onboarding:** social screenshots and typed or voice Q&A produce a profile. Deliverable is two artifacts — a structured JSON profile for machines and a human-readable bio.
+2. **Preference discovery:** relationship history and reference photos inform a matching schema. Deliverable is a candidate filter template.
+3. **Curated introductions:** three to five suggestions per week. Deliverable is a weekly shortlist where every candidate carries a written rationale.
+4. **Date coordination:** scheduling, venue suggestions and reminders. Deliverable is a confirmed schedule plus a transcript; MVP reservations are made manually, not through a booking API.
+5. **Feedback:** mutual second-date interest and post-date feedback. Deliverable is a feedback summary that updates the person's reputation and intent signals.
 
 This is a roadmap, not a shipped-feature checklist. Background checks, live social scraping and booking APIs are outside that MVP scope. This inspection does not establish a working candidate pool, matching service or reservation system.
 
@@ -53,7 +53,7 @@ Configuration names read by the inspected code:
 | Area | Variables |
 | --- | --- |
 | Environment | `ENVIRONMENT` (set explicitly to `staging`) |
-| Twilio | `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `WHATSAPP_NUMBER` |
+| Twilio | `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `WHATSAPP_NUMBER`, `TWILIO_CALLER_NUMBER` |
 | Database | `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_HOST`, `POSTGRES_PORT`; `oracle/messaging/app.py` also reads `DATABASE_URL` |
 | Model/voice | `OPENAI_API_KEY`, `DEEPGRAM_API_KEY`, `ELEVENLABS_API_KEY` |
 | Routing | `VOICE_API_BASE_URL` |
@@ -72,6 +72,13 @@ Known setup gaps:
 ## Lessons and status
 
 The earlier coach's postmortem identified weak differentiation from general-purpose chat tools and account/profile-storage friction. The later direction focused on intake, introductions and coordination. These are documented lessons and plans, not evidence of current adoption or launch success.
+
+The postmortem is blunter than the paragraph above, and the specifics are the useful part:
+
+- A four-week build estimate ran about three months.
+- Adoption was near zero.
+- No success metric was ever set, so there was nothing to judge the build against.
+- The UX was over-engineered while login and basic profile storage stayed broken.
 
 A current public launch, supported demo URL, production readiness and active-user metrics have not been verified. No license granting redistribution was verified in this handoff.
 
